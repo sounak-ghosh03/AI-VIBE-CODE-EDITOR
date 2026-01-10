@@ -9,11 +9,12 @@ export default async function DashboardLayout({
 }) {
   const playgroundData = await getAllPlaygroundForUser();
 
-  const formattedPlaygroundData = playgroundData?.map((item) => ({
-    id: item.id,
-    name: item.title,
-    starred: item.Starmark?.[0]?.isMarked || false,
-  }))||[];
+  const formattedPlaygroundData =
+    playgroundData?.map((item) => ({
+      id: item.id,
+      name: item.title,
+      starred: item.Starmark?.[0]?.isMarked || false,
+    })) || [];
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full overflow-x-hidden">
