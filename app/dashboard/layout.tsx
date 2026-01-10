@@ -7,18 +7,17 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const playgroundData = await getAllPlaygroundForUser();
 
-    const playgroundData = await getAllPlaygroundForUser();
-
-    const formattedPlaygroundData = playgroundData?.map((item) => ({
-        id: item.id,
-        name: item.title,
-        starred:false
-    }))
+  const formattedPlaygroundData = playgroundData?.map((item) => ({
+    id: item.id,
+    name: item.title,
+    starred: item.Starmark?.[0]?.isMarked || false,
+  }))||[];
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full overflow-x-hidden">
-        {/* Dashboard Sidebar */}
+        {/* Pass the formatted data with string icon names */}
         <DashboardSidebar initialPlaygroundData={formattedPlaygroundData} />
         <main className="flex-1">{children}</main>
       </div>

@@ -1,4 +1,7 @@
-import React from "react";
+import { getAllPlaygroundForUser } from "@/features/dashboard/actions";
+import AddNewButton from "@/features/dashboard/components/add-new";
+import AddRepo from "@/features/dashboard/components/add-repo";
+import ProjectTable from "@/features/dashboard/components/project-table";
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-16">
@@ -7,7 +10,7 @@ const EmptyState = () => (
     <p className="text-gray-400">Create a new project to get started!</p>
   </div>
 );
-const DashboardPage =async () => {
+const DashboardPage = async () => {
   const playgrounds = await getAllPlaygroundForUser();
   return (
     <div className="flex flex-col justify-start items-center min-h-screen mx-auto max-w-7xl px-4 py-10">
@@ -17,14 +20,14 @@ const DashboardPage =async () => {
       </div>
       <div>
         playgrounds && playgrounds.length === 0 ? (
-          <EmptyState />
+        <EmptyState />
         ):(
-          <ProjectTable
-          projects={playgrounds||[]}
-          onDeleteProject={()=>{}}
-          onUpdateProject={()=>{}}
-          onDuplicateProject={()=>{}}
-          />
+        <ProjectTable
+          projects={playgrounds || []}
+          onDeleteProject={() => {}}
+          onUpdateProject={() => {}}
+          onDuplicateProject={() => {}}
+        />
         )
       </div>
     </div>
