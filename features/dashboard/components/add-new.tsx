@@ -1,7 +1,7 @@
 "use client";
 import TemplateSelectionModal from "@/components/modal/template-selector-modal";
 import { Button } from "@/components/ui/button";
-import { createPlayground } from "@/features/playground/actions";
+import { createPlayground } from "@/features/dashboard/actions";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
