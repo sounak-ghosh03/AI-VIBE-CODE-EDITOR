@@ -53,7 +53,7 @@ import {
    Eye,
 } from "lucide-react";
 import { toast } from "sonner";
-import { MarkedToggleButton } from "./toggle-star";
+import { MarkedToggleButton } from "./marked-toggle";
 
 interface ProjectTableProps {
    projects: Project[];

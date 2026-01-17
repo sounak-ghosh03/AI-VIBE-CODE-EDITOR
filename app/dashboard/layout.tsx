@@ -9,11 +9,22 @@ export default async function DashboardLayout({
 }) {
   const playgroundData = await getAllPlaygroundForUser();
 
+  const technologyIconMap: Record<string, string> = {
+    REACT: "Zap",
+    NEXTJS: "Lightbulb",
+    EXPRESS: "Database",
+    VUE: "Compass",
+    HONO: "FlameIcon",
+    ANGULAR: "Terminal",
+  }
+  
   const formattedPlaygroundData =
     playgroundData?.map((item) => ({
       id: item.id,
       name: item.title,
       starred: item.Starmark?.[0]?.isMarked || false,
+      icon: technologyIconMap[item.template] || "Code2", // Default to "Code2" if template not found
+    
     })) || [];
   return (
     <SidebarProvider>
