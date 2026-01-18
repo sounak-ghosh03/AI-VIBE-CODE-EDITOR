@@ -10,6 +10,7 @@ const EmptyState = () => (
     <p className="text-gray-400">Create a new project to get started!</p>
   </div>
 );
+
 const DashboardPage = async () => {
   const playgrounds = await getAllPlaygroundForUser();
   return (
@@ -18,17 +19,18 @@ const DashboardPage = async () => {
         <AddNewButton />
         <AddRepo />
       </div>
-      <div>
-        playgrounds && playgrounds.length === 0 ? (
+      <div className="mt-10 flex flex-col justify-center items-center w-full">
+        {playgrounds && playgrounds.length === 0 ? (
         <EmptyState />
         ):(
+          // @ts-ignore
         <ProjectTable
           projects={playgrounds || []}
           onDeleteProject={deleteProjectById}
           onUpdateProject={editProjectById}
           onDuplicateProject={duplicateProjectById}
         />
-        )
+        )}
       </div>
     </div>
   );

@@ -122,17 +122,30 @@ export const duplicateProjectById = async (id: string) => {
    try {
       const originalPlayground = await db.playground.findUnique({
          where: { id },
+         include:{
+            templateFiles: true
+         }
       });
       if (!originalPlayground) {
          throw new Error("Original Playground not found");
       }
       const duplicatePlayground = await db.playground.create({
          data: {
-            title: `${originalPlayground.title} Copy`,
+            title: `${originalPlayground.title} (Copied from original)`,
             template: originalPlayground.template,
             description: originalPlayground.description,
             userId: originalPlayground.userId,
+            templateFiles: {
+               // @ts-ignore
+               create: originalPlayground.templateFiles.map((file) => ({
+                  content: file.content,
+               })),
+            },
          },
       });
-   } catch (error) {}
+      revalidatePath("/dashboard");
+      return duplicatePlayground;
+   } catch (error) {
+      console.log("Error duplicating the project",error);
+   }
 };
