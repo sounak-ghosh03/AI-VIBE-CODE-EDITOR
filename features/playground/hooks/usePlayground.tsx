@@ -12,7 +12,7 @@ interface PlaygroundData {
 interface UsePlaygroundReturn {
    playgroundData: PlaygroundData | null;
    templateData: TemplateFolder | null;
-   isloading: boolean;
+   isLoading: boolean;
    error: string[] | null;
    loadPlayground: () => Promise<void>;
    saveTemplateData: (data: TemplateFolder) => Promise<void>;
@@ -25,13 +25,13 @@ export const usePlayground = (id: string): UsePlaygroundReturn => {
    const [templateData, setTemplateData] = useState<TemplateFolder | null>(
       null,
    );
-   const [isloading, setIsloading] = useState<boolean>(false);
+   const [isLoading, setIsLoading] = useState<boolean>(false);
    const [error, setError] = useState<string[] | null>(null);
 
    const loadPlayground = useCallback(async () => {
       if (!id) return;
       try {
-         setIsloading(true);
+         setIsLoading(true);
          setError(null);
 
          const data = await getPlaygroundById(id);
@@ -72,7 +72,7 @@ export const usePlayground = (id: string): UsePlaygroundReturn => {
          console.error("Error fetching playground data:", error);
          setError(["Failed to fetch playground data"]);
       } finally {
-         setIsloading(false);
+         setIsLoading(false);
       }
    }, [id]);
    const saveTemplateData = useCallback(
@@ -80,13 +80,27 @@ export const usePlayground = (id: string): UsePlaygroundReturn => {
          try {
             await SaveUpdatedCode(id, data);
             toast.success("Template saved successfully");
-            setIsloading(true);
+            setIsLoading(true);
             setError(null);
          } catch (error) {
             console.error("Error saving template data:", error);
             toast.error("Failed to save template data");
+            throw error;
          }
       },
       [id],
    );
+
+   useEffect(() => {
+      loadPlayground();
+   }, [loadPlayground]);
+
+   return {
+      playgroundData,
+      templateData,
+      isLoading,
+      error,
+      loadPlayground,
+      saveTemplateData,
+   };
 };

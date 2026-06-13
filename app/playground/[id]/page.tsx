@@ -9,11 +9,12 @@ import { TemplateFileTree } from "@/features/playground/components/playground-ex
 
 const MainPlaygroundPage = () => {
    const { id } = useParams<{ id: string }>();
-   const { playgroundData, templateData, isloading, error, saveTemplateData } =
+   const { playgroundData, templateData, isLoading, error, saveTemplateData } =
       usePlayground(id);
 
    console.log("playgroundData", playgroundData);
    console.log("templateData", templateData);
+
 
    const activeFile = "index.tsx";
 
