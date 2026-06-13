@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import type { TemplateFolder } from "../lib/path-to-json";
-import { getPlaygroundById } from "../actions";
+import { getPlaygroundById, SaveUpdatedCode } from "../actions";
 
 interface PlaygroundData {
    id: string;
-   name?: string;
+   title?: string;
    [key: string]: any;
 }
 
@@ -51,34 +51,42 @@ export const usePlayground = (id: string): UsePlaygroundReturn => {
             throw new Error(`Failed to fetch template data: ${res.statusText}`);
 
          const templateData = await res.json();
-          if (templateData.templateJson && Array.isArray(templateData.templateJson)) {
-        setTemplateData({
-          folderName: "Root",
-          items: templateData.templateJson,
-        });
-      } else {
-        setTemplateData(templateData.templateJson || {
-          folderName: "Root",
-          items: [],
-        });
-      }
-      toast.success("Template loaded successfully");
+         if (
+            templateData.templateJson &&
+            Array.isArray(templateData.templateJson)
+         ) {
+            setTemplateData({
+               folderName: "Root",
+               items: templateData.templateJson,
+            });
+         } else {
+            setTemplateData(
+               templateData.templateJson || {
+                  folderName: "Root",
+                  items: [],
+               },
+            );
+         }
+         toast.success("Template loaded successfully");
       } catch (error) {
          console.error("Error fetching playground data:", error);
          setError(["Failed to fetch playground data"]);
-
       } finally {
          setIsloading(false);
       }
-
    }, [id]);
-   const saveTemplateData = useCallback(async (data: TemplateFolder) => {
-      
-      try {
-        await SaveUpdatedCode(id, data);
-        toast.success("Template saved successfully");
-         setIsloading(true);
-         setError(null);
-   }, [id])
-   
+   const saveTemplateData = useCallback(
+      async (data: TemplateFolder) => {
+         try {
+            await SaveUpdatedCode(id, data);
+            toast.success("Template saved successfully");
+            setIsloading(true);
+            setError(null);
+         } catch (error) {
+            console.error("Error saving template data:", error);
+            toast.error("Failed to save template data");
+         }
+      },
+      [id],
+   );
 };
