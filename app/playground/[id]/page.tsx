@@ -1,29 +1,50 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { usePlayground } from "@/features/playground/hooks/usePlayground";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { TemplateFileTree } from "@/features/playground/components/playground-explorer";
+import { useFileExplorer } from "@/features/playground/hooks/useFileExplorer";
+import { TemplateFile } from "@/features/playground/lib/path-to-json";
 
 const MainPlaygroundPage = () => {
    const { id } = useParams<{ id: string }>();
    const { playgroundData, templateData, isLoading, error, saveTemplateData } =
       usePlayground(id);
+   const {
+      activeFileId,
+      closeAllFiles,
+      openFile,
+      openFiles,
+      setActiveFileId,
+      setTemplateData,
+      setPlaygroundId,
+      setOpenFiles,
+   } = useFileExplorer();
 
-   console.log("playgroundData", playgroundData);
-   console.log("templateData", templateData);
+   useEffect(() => {
+      setPlaygroundId(id);
+   }, [id]);
 
+   useEffect(() => {
+      if (templateData && !openFiles.length) {
+         setTemplateData(templateData);
+      }
+   }, [templateData, setTemplateData, openFiles.length]);
 
-   const activeFile = "index.tsx";
-
+   const activeFile = openFiles.find((file) => file.id === activeFileId);
+   const hasUnsavedChanges = openFiles.some((file) => file.hasUnsavedChanges);
+   const handleFileSelect = (file: TemplateFile) => {
+      openFile(file);
+   };
    return (
       <TooltipProvider>
          <>
             <TemplateFileTree
                data={templateData!}
-               onFileSelect={() => {}}
+               onFileSelect={handleFileSelect}
                selectedFile={activeFile}
                title="File Explorer"
                onAddFile={() => {}}
