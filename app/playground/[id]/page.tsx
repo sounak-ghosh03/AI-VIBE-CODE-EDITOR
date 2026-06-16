@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import PlaygroundEditor from "@/features/playground/components/playground-editor";
+import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 
 const MainPlaygroundPage = () => {
    const { id } = useParams<{ id: string }>();
@@ -92,7 +94,6 @@ const MainPlaygroundPage = () => {
                               <Button
                                  size="sm"
                                  variant="outline"
-                                 onClick={}
                                  disabled={
                                     !activeFile || !activeFile.hasUnsavedChanges
                                  }
@@ -108,7 +109,6 @@ const MainPlaygroundPage = () => {
                               <Button
                                  size="sm"
                                  variant="outline"
-                                 onClick={}
                                  disabled={!hasUnsavedChanges}
                               >
                                  <Save className="h-4 w-4" />
@@ -199,6 +199,22 @@ const MainPlaygroundPage = () => {
                                  )}
                               </div>
                            </Tabs>
+                        </div>
+                        <div className="flex-1">
+                           <ResizablePanelGroup
+                              direction="horizontal"
+                              className="h-full"
+                           >
+                              <ResizablePanel
+                                 defaultSize={isPreviewVisible ? 50 : 100}
+                              >
+                                 <PlaygroundEditor
+                                    activeFile={activeFile}
+                                    content={activeFile?.content || ""}
+                                    onContentChange={() => {}}
+                                 />
+                              </ResizablePanel>
+                           </ResizablePanelGroup>
                         </div>
                      </div>
                   ) : (
