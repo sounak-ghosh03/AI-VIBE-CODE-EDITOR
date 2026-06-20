@@ -24,7 +24,13 @@ import {
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PlaygroundEditor from "@/features/playground/components/playground-editor";
-import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import {
+   ResizableHandle,
+   ResizablePanel,
+   ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import { useWebContainers } from "@/features/webcontainers/hooks/useWebContainers";
+import WebContainerPreview from "@/features/webcontainers/components/webcontainer-preview";
 
 const MainPlaygroundPage = () => {
    const { id } = useParams<{ id: string }>();
@@ -41,6 +47,15 @@ const MainPlaygroundPage = () => {
       setPlaygroundId,
       setOpenFiles,
    } = useFileExplorer();
+
+   const {
+      serverUrl,
+      isLoading: isContainerLoading,
+      error: containerError,
+      instance,
+      writeFileSync,
+      // @ts-ignore
+   } = useWebContainers({ templateData });
 
    useEffect(() => {
       setPlaygroundId(id);
@@ -214,6 +229,23 @@ const MainPlaygroundPage = () => {
                                     onContentChange={() => {}}
                                  />
                               </ResizablePanel>
+
+                              {isPreviewVisible && (
+                                 <>
+                                    <ResizableHandle />
+                                    <ResizablePanel defaultSize={50}>
+                                       <WebContainerPreview
+                                          templateData={templateData}
+                                          instance={instance}
+                                          writeFileSync={writeFileSync}
+                                          isLoading={isContainerLoading}
+                                          error={containerError}
+                                          serverUrl={serverUrl!}
+                                          forceResetup={false}
+                                       />
+                                    </ResizablePanel>
+                                 </>
+                              )}
                            </ResizablePanelGroup>
                         </div>
                      </div>
